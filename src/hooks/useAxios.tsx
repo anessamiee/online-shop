@@ -11,7 +11,7 @@ function useAxios<T>(axiosParams: AxiosRequestConfig) {
   const fetchData = async (params: AxiosRequestConfig) => {
     try {
       const result = await axios.request(params)
-      if (result.data === null) {
+      if (result.data === null || result.data==='') {
         new AxiosError()
         const error = new AxiosError()
         error.code = 'ERR_BAD_REQUEST'
