@@ -25,11 +25,10 @@ export const CartContextProvider = (props: PropsWithChildren) => {
   const removeFromCart = (id: number) => {
     setCartItems(cartItems.filter((item) => item.id !== id))
   }
-  return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
-      {props.children}
-    </CartContext.Provider>
-  )
+  const value = React.useMemo(() => {
+    return { cartItems, addToCart, removeFromCart }
+  }, [cartItems, addToCart, removeFromCart])
+  return <CartContext.Provider value={value}>{props.children}</CartContext.Provider>
 }
 
 export default CartContext

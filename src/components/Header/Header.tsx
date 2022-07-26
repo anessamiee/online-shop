@@ -1,44 +1,32 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Cart from './Cart'
 import UserInfo from './UserInfo'
 import { FiMenu } from 'react-icons/fi'
-import useWindowDimensions from '../../hooks/useDemention'
+
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 const Header: React.FC = () => {
   const [mobile, setMobile] = useState(false)
   const [menu, setMenu] = useState(false)
-  const { innerWidth } = useWindowDimensions()
 
+  const minWidth = useMediaQuery('(min-width: 640px)')
   useEffect(() => {
-    mobile ? setMenu(false) : setMenu(true)
-  }, [mobile])
-  useEffect(() => {
-    if (innerWidth > 639) {
+    if (minWidth) {
       setMobile(false)
+      setMenu(true)
     } else {
       setMobile(true)
+      setMenu(false)
     }
-  }, [innerWidth])
-//   useEffect(()=>{
-// handleMenu()
-//   },[])
-//   const s = () => {
-//     if (innerWidth > 639) {
-//       setMobile(false)
-//     } else {
-//       setMobile(true)
-//     }
-//   }
-//   const handleWindow = useCallback(() => {
-//     s()
-//   }, [])
+  }, [minWidth])
 
   console.log('header render')
   const handleMenu = useCallback(() => {
     setMenu((state) => !state)
   }, [menu])
+
   return (
-    <header className='text-gray-900 bg-gray-400 sm:px-16 px-8 py-4 text-2xl'>
+    <header className='text-gray-900 bg-gray-400 sm:px-16 px-8 py-4 text-2xl antialiased'>
       {mobile && (
         <div className='w-full flex items-center relative justify-center sm:top-0 sm:hidden'>
           <h1 className='sm:text-4xl font-medium'>Online Shop</h1>
