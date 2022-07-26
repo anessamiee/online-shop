@@ -2,6 +2,7 @@ import React from 'react'
 import { BiUserCircle } from 'react-icons/bi'
 import useAxios from '../../hooks/useAxios'
 import { User } from '../../types/User'
+import LoadingSpinner from '../UI/LoadingSpinner'
 
 const UserInfo: React.FC = () => {
   const { response, loading, error } = useAxios<User>({
@@ -11,12 +12,11 @@ const UserInfo: React.FC = () => {
   })
   console.log('user remder')
   const name = response?.data.name.firstname
-
   return (
     <div className='flex items-center'>
       <BiUserCircle className='text-4xl' />
       <span className={`ml-2 text-2xl ${error && 'text-red-700'}`}>
-        {loading && 'Loading...'}
+        {loading && <LoadingSpinner />}
         {error && error.code}
         {!loading && !error && 'Hi, ' + name}
       </span>
