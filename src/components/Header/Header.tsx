@@ -3,7 +3,7 @@ import Cart from './Cart'
 import UserInfo from './UserInfo'
 import { FiMenu } from 'react-icons/fi'
 
-import useMediaQuery from '../../hooks/useMediaQueries'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 const Header: React.FC = () => {
   const [mobile, setMobile] = useState(false)
