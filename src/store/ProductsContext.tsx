@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { createContext, PropsWithChildren, useEffect, useState, useCallback } from 'react'
+import { createContext, PropsWithChildren, useEffect, useState, useCallback, useMemo } from 'react'
 import useAxios from '../hooks/useAxios'
 import { Product } from '../types/Product'
 
@@ -34,7 +34,6 @@ export const ProductsContextProvider = (props: PropsWithChildren) => {
   }, [response])
   const search = useCallback(
     (title: string, category: string) => {
-      console.log(category)
       if (category === 'All') {
         const serachedProducts = productsState.filter((item) => stringIncludes(item.title, title))
         setProducts(serachedProducts)
@@ -49,10 +48,9 @@ export const ProductsContextProvider = (props: PropsWithChildren) => {
         setProducts(productsState)
       }
     },
-    [products, productsState],
+    [productsState],
   )
-
-  console.log('context render')
+  console.log('product context render')
   return (
     <ProductsContext.Provider value={{ products, search, error, loading }}>
       {props.children}
