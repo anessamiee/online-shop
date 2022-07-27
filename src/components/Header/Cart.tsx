@@ -3,7 +3,7 @@ import CartContext from '../../store/CartContext'
 
 const Cart = () => {
   const cartCtx = useContext(CartContext)
-  const length = cartCtx?.cartItems.length
+  const length = cartCtx.cartItems.length
   console.log('Cart render')
   return (
     <div className='flex items-center justify-center '>

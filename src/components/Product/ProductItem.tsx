@@ -1,8 +1,15 @@
+import React, { useCallback, useContext, useState } from 'react'
+import CartContext from '../../store/CartContext'
 import { Product } from '../../types/Product'
 import Button from '../UI/Button'
 
 const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
-  console.log('productItem render')
+  const cartCtx = useContext(CartContext)
+  const handleAddToCart = useCallback(() => {
+    cartCtx.addToCart(product)
+  }, [cartCtx, product])
+  console.log('productItem render ')
+
   return (
     <div className='w-full h-full py-6 flex flex-col items-center justify-start shadow-lg rounded-lg '>
       <div className='relative w-full pt-[50%] overflow-hidden '>
@@ -10,6 +17,8 @@ const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
           src={product.image}
           alt={product.title}
           className='absolute inset-0 w-full h-full object-contain'
+          loading='lazy'
+          decoding='async'
         />
       </div>
       <div className='px-4 flex flex-col h-full justify-between'>
@@ -19,10 +28,11 @@ const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
         </section>
         <section className='flex items-end justify-between h-1/4'>
           <h3>{product.price}$</h3>
-          <Button>Add to cart</Button>
+          <Button onClick={handleAddToCart}>Add to cart</Button>
         </section>
       </div>
     </div>
   )
 }
-export default ProductItem
+export default React.memo(ProductItem)
+// export default ProductItem
