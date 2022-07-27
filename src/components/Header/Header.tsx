@@ -23,7 +23,7 @@ const Header: React.FC = () => {
   console.log('header render')
   const handleMenu = useCallback(() => {
     setMenu((state) => !state)
-  }, [menu])
+  }, [])
 
   return (
     <header className='text-gray-900 bg-gray-400 sm:px-16 px-8 py-4 text-2xl antialiased'>
