@@ -2,6 +2,7 @@ import { AxiosError } from 'axios'
 import { createContext, PropsWithChildren, useEffect, useState, useCallback, useMemo } from 'react'
 import useAxios from '../hooks/useAxios'
 import { Product } from '../types/Product'
+import { stringIncludes } from '../utils/StringIncludes'
 
 type ProductsContext = {
   products: Product[]
@@ -58,11 +59,3 @@ export const ProductsContextProvider = (props: PropsWithChildren) => {
   )
 }
 export default ProductsContext
-
-const stringIncludes = (str1: string, str2: string): boolean => {
-  if (str1.toLowerCase().includes(str2.toLowerCase())) {
-    return true
-  } else {
-    return false
-  }
-}

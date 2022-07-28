@@ -5,13 +5,20 @@ import LoadingSpinner from '../UI/LoadingSpinner'
 import ProductItem from './ProductItem'
 
 const ProductsList: React.FC = () => {
-  const productsCtx = useContext(ProductsContext)
-  const products = productsCtx.products
-  if (productsCtx.loading) {
-    return <LoadingSpinner />
+  const { products, loading, error } = useContext(ProductsContext)
+  if (loading) {
+    return (
+      <div className='p-32'>
+        <LoadingSpinner />
+      </div>
+    )
   }
-  if (productsCtx.error) {
-    return <h1 className='text-2xl text-red-400'>{productsCtx.error.message}</h1>
+  if (error) {
+    return (
+      <div className='p-32'>
+        <h1 className='text-2xl text-red-400 '>{error.message}</h1>
+      </div>
+    )
   }
   console.log('list render')
   return (
