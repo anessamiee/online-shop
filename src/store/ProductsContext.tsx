@@ -1,61 +1,46 @@
-import { AxiosError } from 'axios'
-import { createContext, PropsWithChildren, useEffect, useState, useCallback, useMemo } from 'react'
-import useAxios from '../hooks/useAxios'
-import { Product } from '../types/Product'
-import { stringIncludes } from '../utils/StringIncludes'
+import { createContext, PropsWithChildren, useEffect, useMemo, useReducer } from 'react'
+import { GetAllProducts } from '../api/products'
+import {
+  productReducer,
+  ProductsAction,
+  ProductsActions,
+  ProductsState,
+} from './reducers/ProductsReducer'
 
 type ProductsContext = {
-  products: Product[]
-  search: (title: string, category: string) => void
-  loading: boolean
-  error: AxiosError | undefined
+  state: ProductsState
+  dispatch: React.Dispatch<ProductsAction>
+}
+const initalState: ProductsState = {
+  allProducts: [],
+  filteredProducts: [],
+  loading: true,
+  error: undefined,
 }
 const initialContext: ProductsContext = {
-  products: [],
-  search: () => {},
-  loading: false,
-  error: undefined,
+  state: initalState,
+  dispatch: () => null,
 }
 const ProductsContext = createContext<ProductsContext>(initialContext)
 
 export const ProductsContextProvider = (props: PropsWithChildren) => {
-  const [productsState, setProductsState] = useState<Product[]>([])
-  const [products, setProducts] = useState<Product[]>([])
-  const { response, error, loading } = useAxios<Product[]>({
-    method: 'GET',
-    url: '/products',
-    responseType: 'json',
-  })
+  const { response, error, loading } = GetAllProducts()
+
+  const [state, dispatch] = useReducer(productReducer, initalState)
 
   useEffect(() => {
     if (response) {
-      setProducts(response.data)
-      setProductsState(response.data)
+      dispatch({
+        type: ProductsActions.InitialState,
+        payload: {
+          products: response.data,
+          loading,
+          error,
+        },
+      })
     }
-  }, [response])
-  const search = useCallback(
-    (title: string, category: string) => {
-      if (category === 'All') {
-        const serachedProducts = productsState.filter((item) => stringIncludes(item.title, title))
-        setProducts(serachedProducts)
-      }
-      if (category !== 'All') {
-        const serachedProducts = productsState.filter(
-          (item) => stringIncludes(item.title, title) && item.category === category,
-        )
-        setProducts(serachedProducts)
-      }
-      if (title.trim().length === 0) {
-        setProducts(productsState)
-      }
-    },
-    [productsState],
-  )
-  console.log('product context render')
-  return (
-    <ProductsContext.Provider value={{ products, search, error, loading }}>
-      {props.children}
-    </ProductsContext.Provider>
-  )
+  }, [response, error, loading])
+  const store = useMemo(() => ({ state, dispatch }), [state])
+  return <ProductsContext.Provider value={store}>{props.children}</ProductsContext.Provider>
 }
 export default ProductsContext

@@ -1,17 +1,19 @@
-import React, { useCallback, useContext, useState } from 'react'
-import CartContext from '../../store/CartContext'
+import React from 'react'
 import { Product } from '../../types/Product'
 import Button from '../UI/Button'
 
-const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
-  const cartCtx = useContext(CartContext)
-  const handleAddToCart = useCallback(() => {
-    cartCtx.addToCart(product)
-  }, [cartCtx, product])
-  console.log('productItem render ')
+type Props = {
+  product: Product
+  addToCart: (product: Product) => void
+}
+
+const ProductItem: React.FC<Props> = ({ product, addToCart }) => {
+  const handleAddToCart = () => {
+    addToCart(product)
+  }
 
   return (
-    <div className='w-full h-full py-6 flex flex-col items-center justify-start shadow-lg rounded-lg '>
+    <div className='w-full h-full py-6 flex flex-col items-center justify-start shadow-lg rounded-lg gap-4 '>
       <div className='relative w-full pt-[50%] overflow-hidden '>
         <img
           src={product.image}
@@ -34,5 +36,5 @@ const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
     </div>
   )
 }
+
 export default React.memo(ProductItem)
-// export default ProductItem
