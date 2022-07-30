@@ -23,9 +23,9 @@ const Header: React.FC = () => {
     }
   }, [minWidth])
 
-  const handleMenu = useCallback(() => {
+  const handleMenu = () => {
     setMenu((state) => !state)
-  }, [])
+  }
 
   const handleReset = useCallback(() => {
     if (location.pathname === '/') {
