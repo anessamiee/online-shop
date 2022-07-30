@@ -8,13 +8,13 @@ import { ProductsContextProvider } from './store/ProductsContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
-  <CartContextProvider>
-    <ProductsContextProvider>
+  <ProductsContextProvider>
+    <CartContextProvider>
       <React.StrictMode>
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </React.StrictMode>
-    </ProductsContextProvider>
-  </CartContextProvider>,
+    </CartContextProvider>
+  </ProductsContextProvider>,
 )
