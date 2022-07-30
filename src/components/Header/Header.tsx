@@ -3,13 +3,16 @@ import Cart from './Cart'
 import UserInfo from './UserInfo'
 import { FiMenu } from 'react-icons/fi'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import useProducts from '../../hooks/useProducts'
 
 const Header: React.FC = () => {
   const [mobile, setMobile] = useState(false)
   const [menu, setMenu] = useState(false)
-
+  const { reset } = useProducts()
+  const location = useLocation()
   const minWidth = useMediaQuery('(min-width: 640px)')
+
   useEffect(() => {
     if (minWidth) {
       setMobile(false)
@@ -20,13 +23,20 @@ const Header: React.FC = () => {
     }
   }, [minWidth])
 
-  console.log('header render')
   const handleMenu = useCallback(() => {
     setMenu((state) => !state)
   }, [])
+
+  const handleReset = useCallback(() => {
+    if (location.pathname === '/') {
+      reset()
+    }
+  }, [reset, location.pathname])
+
   const H1 = <h1 className='text-3xl font-medium '>Online Shop</h1>
+
   return (
-    <header className='text-gray-900 bg-gray-400 sm:px-16 px-8 py-6 sm:py-4 text-2xl antialiased w-full'>
+    <header className='bg-gray-300 shadow-sm sm:px-16 px-8 py-6 sm:py-4 w-full text-2xl selection:bg-gray-400'>
       {mobile && (
         <div className='w-full flex items-center relative justify-center sm:top-0 sm:hidden'>
           <Link to={'/'}>{H1}</Link>
@@ -48,7 +58,7 @@ const Header: React.FC = () => {
         >
           {H1}
         </Link>
-        <Link to={'/shopping-cart'}>
+        <Link to={'/shopping-cart'} onChange={handleReset}>
           <Cart />
         </Link>
       </nav>
