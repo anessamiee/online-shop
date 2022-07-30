@@ -1,6 +1,8 @@
+import React from 'react'
+
 type Props = {
   className?: string
-  children: string
+  children: React.ReactNode
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined
   type?: 'button' | 'reset' | 'submit'
 }
@@ -18,4 +20,4 @@ const Button: React.FC<Props> = ({ className, children, onClick, type }) => {
     </button>
   )
 }
-export default Button
+export default React.memo(Button)
