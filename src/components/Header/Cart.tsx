@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
-import CartContext from '../../store/CartContext'
+import React from 'react'
+import useCart from '../../hooks/useCart'
 
-const Cart = () => {
-  const cartCtx = useContext(CartContext)
-  const length = cartCtx.cartItems.length
-  console.log('Cart render')
+const Cart: React.FC = () => {
+  const { cartProducts } = useCart()
+  const length = cartProducts.map((item) => item).length
+
   return (
     <div className='flex items-center justify-center '>
       <div>Cart</div>
