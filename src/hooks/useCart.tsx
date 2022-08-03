@@ -7,7 +7,7 @@ const useCart = () => {
   const { state, dispatch } = useContext(CartContext)
   const cartTotalPrice = state.cartTotalPrice
   const cartProducts = state.products
-
+  const allProductsNo = state.allProductsNo
   const addToCart = useCallback(
     (product: Product) => dispatch({ type: ActionTypes.Add, payload: { product } }),
     [dispatch],
@@ -21,6 +21,6 @@ const useCart = () => {
       dispatch({ type: ActionTypes.Update, payload: { id, quantity } }),
     [dispatch],
   )
-  return { cartProducts, cartTotalPrice, addToCart, removeFromCart, updateQuantity }
+  return { cartProducts, cartTotalPrice, addToCart, removeFromCart, updateQuantity, allProductsNo }
 }
 export default useCart
