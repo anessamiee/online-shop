@@ -7,7 +7,7 @@ type CartContext = {
   dispatch: React.Dispatch<CartAction>
 }
 const initialValues: CartContext = {
-  state: { products: [], cartTotalPrice: 0 },
+  state: { products: [], cartTotalPrice: 0, allProductsNo: 0 },
   dispatch: () => null,
 }
 
@@ -28,6 +28,7 @@ export const CartContextProvider = (props: PropsWithChildren) => {
   const [state, dispatch] = useReducer(cartReducer, {
     products: [{ product: dummyItem, quantity: 2, productTotalPrice: dummyItem.price * 2 }],
     cartTotalPrice: dummyItem.price * 2,
+    allProductsNo: 2,
   })
   const store = useMemo(() => ({ state, dispatch }), [state])
   return <CartContext.Provider value={store}>{props.children}</CartContext.Provider>
