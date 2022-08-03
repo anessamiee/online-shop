@@ -28,6 +28,7 @@ export type CartProduct = {
 export type CartState = {
   products: CartProduct[]
   cartTotalPrice: number
+  allProductsNo: number
 }
 
 export type CartAction = ActionMap<CartPayload>[keyof ActionMap<CartPayload>]
@@ -35,54 +36,49 @@ export const cartReducer: Reducer<CartState, CartAction> = (state, action) => {
   switch (action.type) {
     case ActionTypes.Add: {
       const newProduct = action.payload.product
-      if (!isItemExist(newProduct.id, state.products)) {
+      const id = newProduct.id
+      let products = state.products
+      if (!isItemExist(id, products)) {
         const product = newCartProduct(newProduct)
-        const products = [...state.products, product]
-        const cartTotalPrice = getCartTotalPrice(products)
-        return {
-          products,
-          cartTotalPrice,
-        }
+        products = [...products, product]
+      } else if (isItemExist(id, products)) {
+        products = updatedProducts(id, products, 1, true)
       }
-      return state
+      const cartTotalPrice = getCartTotalPrice(products)
+      const allProductsNo = getAllProductsNo(products)
+      return {
+        products,
+        cartTotalPrice,
+        allProductsNo,
+      }
     }
     case ActionTypes.Remove: {
       const products = [...state.products.filter((state) => state.product.id !== action.payload.id)]
       const cartTotalPrice = getCartTotalPrice(products)
+      const allProductsNo = getAllProductsNo(products)
       return {
         products,
         cartTotalPrice,
+        allProductsNo,
       }
     }
     case ActionTypes.Update: {
       const id = action.payload.id
       const quantity = action.payload.quantity
-      if (isItemExist(id, state.products) && quantity >= 1) {
-        const products = [
-          ...state.products.map((cart) => {
-            if (cart.product.id === id) {
-              return {
-                ...cart,
-                quantity,
-                productTotalPrice: setProductTotalPrice(cart.product.price, quantity),
-              }
-            }
-            return cart
-          }),
-        ]
-        const cartTotalPrice = getCartTotalPrice(products)
-        return {
-          products,
-          cartTotalPrice,
-        }
+      const products = updatedProducts(id, state.products, quantity)
+      const cartTotalPrice = getCartTotalPrice(products)
+      const allProductsNo = getAllProductsNo(products)
+      return {
+        products,
+        cartTotalPrice,
+        allProductsNo,
       }
-      return state
     }
     default:
       return state
   }
 }
-const isItemExist = (id: number, state: CartProduct[]): boolean => {
+export const isItemExist = (id: number, state: CartProduct[]): boolean => {
   const newQuantityItem = state.find((item) => item.product.id === id)
   if (newQuantityItem === undefined) return false
   return true
@@ -102,4 +98,32 @@ const newCartProduct = (product: Product): CartProduct => {
   const quantity = 1
   const productTotalPrice = product.price
   return { product, quantity, productTotalPrice }
+}
+const getAllProductsNo = (state: CartProduct[]) => {
+  let total = 0
+  state.map((item) => (total += item.quantity))
+  return total
+}
+const updatedProducts = (
+  id: number,
+  products: CartProduct[],
+  quantity: number,
+  addToCart = false,
+) => {
+  if (isItemExist(id, products) && quantity >= 1) {
+    return [
+      ...products.map((cart) => {
+        if (cart.product.id === id) {
+          addToCart && (quantity += cart.quantity)
+          return {
+            ...cart,
+            quantity,
+            productTotalPrice: setProductTotalPrice(cart.product.price, quantity),
+          }
+        }
+        return cart
+      }),
+    ]
+  }
+  return products
 }
