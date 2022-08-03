@@ -58,7 +58,7 @@ const Header: React.FC = () => {
         >
           {H1}
         </Link>
-        <Link to={'/shopping-cart'} onChange={handleReset}>
+        <Link to={'/shopping-cart'} onClick={handleReset}>
           <Cart />
         </Link>
       </nav>
